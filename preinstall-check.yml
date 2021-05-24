@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: false
+  tasks:
+    - name: Verify that OS is Centos 7
+      assert:
+        quiet: yes
+        success_msg: "{{ ansible_facts['distribution'] }} is ok"
+        that:
+          - ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution']  == 'RedHat'
+          - ansible_facts['distribution_major_version'] == '7'
+
+    - name: Verify that enough memory is present
+      assert:
+        quiet: yes
+        success_msg: "{{ ansible_facts['processor_cores'] }} is sufficient"
+        that:
+          - ansible_facts['memtotal_mb'] >= 990
+
+    - name: Verify that enough cpu cores are present
+      assert:
+        quiet: yes
+        success_msg: "{{ ansible_facts['processor_cores'] }} is sufficient"
+        that:
+          - ansible_facts['processor_cores'] >= 1
+
